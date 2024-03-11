@@ -74,7 +74,7 @@ router.get('/findid', async function (req, res) {
     }
 });
 
-router.get('/delete', async function (req, res) {
+router.post('/delete', async function (req, res) {
     try {
         const result = await StudentModel.deleteOne({ StudentId: req.body.StudentId });
         res.send(result);
@@ -86,9 +86,15 @@ router.get('/delete', async function (req, res) {
 
 router.post('/update', async function (req, res) {
     try {
+        console.log(req.body)
         const updatedData = await StudentModel.findByIdAndUpdate(
-            "65ead4cd4b5aa104279f46e6",
-            { Name: "Karthikeyan" },
+            req.body._id,
+            {
+                StudentId: req.body.StudentId,
+                Name: req.body.Name,
+                Roll: req.body.Roll,
+                Birthday: req.body.Birthday,
+            },
             { new: true } // To return the updated document
         );
 
