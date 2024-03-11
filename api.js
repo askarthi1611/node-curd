@@ -15,24 +15,6 @@ mongoose.connect(uri, {
     console.log('Database connected..')
 })
 module.exports = router;
-router.get('/save', async function (req, res) {
-    try {
-        const newStudent = new StudentModel({
-            StudentId: 102,
-            Name: "Ram",
-            Roll: 2,
-            Birthday: "2001-09-12" // Corrected date format
-        });
-        await newStudent.save();
-        console.log("added successfully");
-        res.render("secrets");
-        res.status(200).send("saved data");
-    } catch (err) {
-        // console.error(err);
-        // Handle error response here if needed
-        res.status(500).send("Error saving student data");
-    }
-});
 
 router.post('/save', async function (req, res) {
     try {
