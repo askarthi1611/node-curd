@@ -23,14 +23,12 @@ router.get('/save', async function (req, res) {
             Roll: 2,
             Birthday: "2001-09-12" // Corrected date format
         });
-        console.log(newStudent);
-
         await newStudent.save();
         console.log("added successfully");
         res.render("secrets");
         res.status(200).send("saved data");
     } catch (err) {
-        console.error(err);
+        // console.error(err);
         // Handle error response here if needed
         res.status(500).send("Error saving student data");
     }
@@ -48,8 +46,8 @@ router.post('/save', async function (req, res) {
         const savedData = await newStudent.save();
         res.send("Data inserted");
     } catch (err) {
-        console.error(err);
-        res.status(500).send("Error inserting student data");
+        // console.error(err);
+        res.status(500).send("Error inserting student data"+'\n'+err);
     }
 });
 
@@ -59,8 +57,8 @@ router.get('/findall', async function (req, res) {
         const data = await StudentModel.find();
         res.send(data);
     } catch (err) {
-        console.error(err);
-        res.status(500).send("Error finding students");
+        // console.error(err);
+        res.status(500).send("Error finding students"+'\n'+err);
     }
 });
 
@@ -69,8 +67,8 @@ router.get('/findid', async function (req, res) {
         const data = await StudentModel.findOne({ StudentId: req.body.StudentId }).exec();
         res.send(data);
     } catch (err) {
-        console.error(err);
-        res.status(500).send("Error fetching student data");
+        // console.error(err);
+        res.status(500).send("Error fetching student data"+'\n'+err);
     }
 });
 
@@ -79,8 +77,8 @@ router.post('/delete', async function (req, res) {
         const result = await StudentModel.deleteOne({ StudentId: req.body.StudentId });
         res.send(result);
     } catch (err) {
-        console.error(err);
-        res.status(500).send("Error deleting student data");
+        // console.error(err);
+        res.status(500).send("Error deleting student data"+'\n'+err);
     }
 });
 
@@ -101,8 +99,8 @@ router.post('/update', async function (req, res) {
         console.log("Data updated!");
         res.send(updatedData);
     } catch (err) {
-        console.error(err);
-        res.status(500).send("Error updating student data");
+        // console.error(err);
+        res.status(500).send("Error updating student data"+'\n'+err);
     }
 });
 
