@@ -6,7 +6,6 @@ const StudentSchema = new mongoose.Schema({
     Roll: Number,
     Birthday: String,
     Address: String
-});
+},{timestamps:true});
 
-module.exports = mongoose.model(
-    'student', StudentSchema, 'Students');
+module.exports = mongoose.model('student', StudentSchema, 'Students');
