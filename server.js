@@ -25,3 +25,4 @@ app.get('/', (req, res) => { //set index route
     res.send("Invalid Endpoint")
 })
 app.use('/api', api);
+

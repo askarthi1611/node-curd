@@ -2,10 +2,13 @@ const mongoose = require('mongoose');
 const express = require('express');
 const router = express.Router();
 const StudentModel = require('./schema');
-let password = 'cc_eFkp2pP_Ehf7'
+const fs = require('fs');
+const pdf = require('html-pdf');
+
 // Connecting to database
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const uri = `mongodb+srv://sk:cc_eFkp2pP_Ehf7@cluster0.yrdr0.mongodb.net?retryWrites=true&w=majority&appName=Cluster0`;
+
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 // const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverSelectionTimeoutMS: 30000 });
 mongoose.connect(uri, {
@@ -34,8 +37,57 @@ router.post('/save', async function (req, res) {
 });
 
 
-router.get('/findall', async function (req, res) {
+router.post('/savepdf', async function (req, res) {
     try {
+        const newStudent = new StudentModel({
+            StudentId: req.body.StudentId,
+            Name: req.body.Name,
+            Roll: req.body.Roll,
+            Birthday: req.body.Birthday,
+        });
+
+        const htmlContent = `<html><body><h1>${req.body.StudentId}</h1><p>${req.body.Name}</p></body></html>`;
+        const outputPath = 'output.pdf';
+
+        pdf.create(htmlContent).toFile(outputPath, async function(err, _) {
+            if (err) {
+                console.error('Error creating PDF:', err);
+                res.status(500).send('Error creating PDF');
+                return;
+            }
+
+            try {
+                const base64String = await pdfToBase64(outputPath);
+                res.send({ "base64": base64String });
+            } catch (error) {
+                console.error('Error converting PDF to base64:', error);
+                res.status(500).send('Error converting PDF to base64');
+            }
+        });
+    } catch (err) {
+        console.error('Error inserting student data:', err);
+        res.status(500).send("Error inserting student data" + '\n' + err);
+    }
+});
+
+function pdfToBase64(filePath) {
+    return new Promise((resolve, reject) => {
+        fs.readFile(filePath, (err, data) => {
+            if (err) {
+                reject(err);
+                return;
+            }
+            const base64Data = Buffer.from(data).toString('base64');
+            resolve(base64Data);
+        });
+    });
+}
+
+router.get('/findall', async function (req, res) {
+    const result = mathUtils.add('Karthikeyan');
+    console.log(result);
+    try {
+
         const data = await StudentModel.find();
         res.send(data);
     } catch (err) {
