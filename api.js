@@ -69,6 +69,31 @@ router.post('/savepdf', async function (req, res) {
         res.status(500).send("Error inserting student data" + '\n' + err);
     }
 });
+var options = { format: 'A4' };
+
+router.post('/savehtmlpdf', async function (req, res) {
+    try {
+        const htmlContent = `${req.body.html}`;
+        const outputPath = `${req.body.name}.pdf`;
+        pdf.create(htmlContent,options).toFile(outputPath, async function(err, _) {
+            if (err) {
+                console.error('Error creating PDF:', err);
+                res.status(500).send('Error creating PDF');
+                return;
+            }
+            try {
+                const base64String = await pdfToBase64(outputPath);
+                res.send({ "base64": base64String });
+            } catch (error) {
+                console.error('Error converting PDF to base64:', error);
+                res.status(500).send('Error converting PDF to base64');
+            }
+        });
+    } catch (err) {
+        console.error('Error inserting student data:', err);
+        res.status(500).send("Error inserting student data" + '\n' + err);
+    }
+});
 
 function pdfToBase64(filePath) {
     return new Promise((resolve, reject) => {
@@ -84,10 +109,7 @@ function pdfToBase64(filePath) {
 }
 
 router.get('/findall', async function (req, res) {
-    const result = mathUtils.add('Karthikeyan');
-    console.log(result);
     try {
-
         const data = await StudentModel.find();
         res.send(data);
     } catch (err) {
@@ -137,4 +159,3 @@ router.post('/update', async function (req, res) {
         res.status(500).send("Error updating student data"+'\n'+err);
     }
 });
-
