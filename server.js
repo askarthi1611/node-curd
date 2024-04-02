@@ -21,8 +21,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Parses the text as json
 app.use(bodyParser.json());
 
-app.get('/', (req, res) => { //set index route
-    res.send("Invalid Endpoint")
-})
+const path = require('path');
+// Define the root route
+app.get('/', (req, res) => {// Send the "Invalid.html" file
+    res.sendFile(path.join(__dirname, 'Invalid.html'));
+});
 app.use('/api', api);
 
